@@ -1,6 +1,6 @@
-// Example 3 : 0.130 sec
-// Example 4 : 1.094 sec
-// Example 5 : 1.378 sec
+// Example 3 : 0.079 sec
+// Example 4 : 0.667 sec
+// Example 5 : 0.925 sec
 #include <vector>
 #include <map>
 using namespace std;
@@ -24,20 +24,23 @@ public:
   int calc( Num num ){
     int ret=0;
     int MD=1000000007;
+    map<Num,int>::iterator it;
     if( num.num[0] == 0 && num.num[1] == 0 && num.num[2] == 0 && 
         num.num[3] == 0 && num.num[4] == 0 ) return 1;
     for( int i=0; i<5; i++ ){
       // apple action
       if( num.num[i] % 2 == 1 && num.num[(i+1)%5] % 2 == 1 ){
         Num d = num; d.num[i]--; d.num[(i+1)%5]--;
-        if( m.find( d ) == m.end() ) m[d] = calc( d );
-        ret += m[d]; ret %= MD;
+        it = m.find( d );
+        if( it == m.end() ){ int a = calc( d ); m[d] = a; ret += a; ret %= MD; }
+        else { ret += it->second; ret %= MD; }
       }
       // orange action
       if( num.num[i] > 0 && num.num[(i+1)%5] > 0 ){
         Num d = num; d.num[i]/=2; d.num[(i+1)%5]/=2;
-        if( m.find( d ) == m.end() ) m[d] = calc( d );
-        ret += m[d]; ret %= MD;
+        it = m.find( d );
+        if( it == m.end() ){ int a = calc( d ); m[d] = a; ret += a; ret %= MD; }
+        else { ret += it->second; ret %= MD; }
       }
     }
     return ret;
